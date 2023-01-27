@@ -10,6 +10,7 @@ import gr.hua.dit.ergasia.omada28.Entity.Buyer;
 import gr.hua.dit.ergasia.omada28.Entity.Contract;
 //import gr.hua.dit.ergasia.omada28.Repository.BuyerRepository;
 import gr.hua.dit.ergasia.omada28.Entity.Contractor;
+import gr.hua.dit.ergasia.omada28.Entity.Seller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -84,7 +85,7 @@ public class BuyerController {
     }
 
     @PostMapping("/{id}/contract/agree/{choice}")
-    public Contract buyerAgree(@PathVariable("id") int id, @PathVariable("choice") int choice){
+    public Contract buyerChoice(@PathVariable("id") int id, @PathVariable("choice") int choice){
         Buyer buyer = buyerDao.findById(id);
 
 
@@ -121,7 +122,7 @@ public class BuyerController {
 
     }
 
-    @PostMapping("/{id}/contract/pay")
+    @PostMapping("/contract/pay/{id}")
     public Contract buyerPay(@PathVariable("id") int id) {
         Buyer buyer = buyerDao.findById(id);
 
@@ -148,6 +149,58 @@ public class BuyerController {
 
     }
 
+    @PostMapping("/contract/agree/{id}")
+    public Contract buyerAgree(@PathVariable("id") int id) {
+        Buyer buyer = buyerDao.findById(id);
+
+
+
+        if (buyer == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
+
+        Contract contract = buyer.getContract();
+
+        if (contract == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
+
+        contract.setBuyer_agree("yes");
+        contractDao.save(contract);
+        return contract;
+
+
+    }
+    @PostMapping("/contract/disagree/{id}")
+    public Contract buyerDisagree(@PathVariable("id") int id) {
+        Buyer buyer = buyerDao.findById(id);
+
+
+
+        if (buyer == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
+
+        Contract contract = buyer.getContract();
+
+        if (contract == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
+
+        contract.setBuyer_agree("no");
+        contractDao.save(contract);
+        return contract;
+
+
+    }
 
 
 

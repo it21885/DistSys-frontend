@@ -76,7 +76,7 @@ public class ContractorController {
         return contract;
     }
 
-    @PostMapping("/{id}/contract/publish")
+    @PostMapping("/contract/publish/{id}")
     public Contract contractorPublish(@PathVariable("id") int id) {
         Contractor contractor = contractorDao.findById(id);
 

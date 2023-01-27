@@ -20,6 +20,8 @@
                 <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Contract</th>
+                <th sec:authorize="hasAnyRole('ADMIN', 'SELLER')" scope="col">Agree</th>
+                <th sec:authorize="hasAnyRole('ADMIN', 'SELLER')" scope="col">Disagree</th>
 
 
             </tr>
@@ -31,6 +33,16 @@
                 <td th:text="${seller.lastName}"></td>
                 <td th:text="${seller.email}"></td>
                 <td th:text="${seller.propertyName}"></td>
+                <td sec:authorize="hasAnyRole('ADMIN','SELLER')">
+                    <button type="submit" th:id="${seller.id}"
+                            name="Agree"> <!--<i class="remove user icon"></i>-->
+                        Agree</button>
+                </td>
+                <td sec:authorize="hasAnyRole('ADMIN','SELLER')">
+                    <button type="submit" th:id="${seller.id}"
+                            name="Disagree"> <!--<i class="remove user icon"></i>-->
+                        Disagree</button>
+                </td>
             </tr>
 
 
@@ -39,6 +51,37 @@
             </tbody>
         </table>
     </div>
+    <script type="text/javascript">
+        $("[name='Agree']").click(function() {
+            var urlCall = "/seller/contract/agree/";
+            $.ajax({
+                url : urlCall + $(this).attr('id'),
+                type : 'POST',
+                success : function(result) {
+                    console.log(result);
+                    $(location).attr("href", value="/");
+                },
+                error : function(result) {
+                    console.log(result);
+                },
+            });
+        });
+        $("[name='Disagree']").click(function() {
+            var urlCall = "/seller/contract/disagree/";
+            $.ajax({
+                url : urlCall + $(this).attr('id'),
+                type : 'POST',
+                success : function(result) {
+                    console.log(result);
+                    $(location).attr("href", value="/");
+                },
+                error : function(result) {
+                    console.log(result);
+                },
+            });
+        });
+
+    </script>
 
 
 </div>

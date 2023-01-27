@@ -20,6 +20,7 @@
                 <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Contract</th>
+                <th sec:authorize="hasAnyRole('ADMIN', 'CONTRACTOR')" scope="col">Publish</th>
 
 
             </tr>
@@ -31,6 +32,11 @@
                 <td th:text="${contractor.lastName}"></td>
                 <td th:text="${contractor.email}"></td>
                 <td th:text="${contractor.propertyName}"></td>
+                <td sec:authorize="hasAnyRole('ADMIN','CONTRACTOR')">
+                    <button type="submit" th:id="${contractor.id}"
+                            name="Agree"> <!--<i class="remove user icon"></i>-->
+                        Publish</button>
+                </td>
             </tr>
 
 
@@ -39,6 +45,23 @@
             </tbody>
         </table>
     </div>
+    <script type="text/javascript">
+        $("[name='Agree']").click(function() {
+            var urlCall = "/contractor/contract/publish/";
+            $.ajax({
+                url : urlCall + $(this).attr('id'),
+                type : 'POST',
+                success : function(result) {
+                    console.log(result);
+                    $(location).attr("href", value="/");
+                },
+                error : function(result) {
+                    console.log(result);
+                },
+            });
+        });
+
+    </script>
 
 
 </div>

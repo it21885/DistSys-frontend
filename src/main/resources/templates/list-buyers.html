@@ -20,6 +20,9 @@
         <th scope="col">Last Name</th>
         <th scope="col">Email</th>
         <th scope="col">Contract</th>
+        <th sec:authorize="hasAnyRole('ADMIN', 'BUYER')" scope="col">Agree</th>
+        <th sec:authorize="hasAnyRole('ADMIN', 'BUYER')" scope="col">Disagree</th>
+        <th sec:authorize="hasAnyRole('ADMIN', 'BUYER')" scope="col">Pay</th>
 
 
       </tr>
@@ -31,6 +34,22 @@
         <td th:text="${buyer.lastName}"></td>
         <td th:text="${buyer.email}"></td>
         <td th:text="${buyer.propertyName}"></td>
+        <td sec:authorize="hasAnyRole('ADMIN','BUYER')">
+          <button type="submit" th:id="${buyer.id}"
+                  name="Agree"> <!--<i class="remove user icon"></i>-->
+            Agree</button>
+        </td>
+        <td sec:authorize="hasAnyRole('ADMIN','BUYER')">
+          <button type="submit" th:id="${buyer.id}"
+                  name="Disagree"> <!--<i class="remove user icon"></i>-->
+            Disagree</button>
+        </td>
+        <td sec:authorize="hasAnyRole('ADMIN','BUYER')">
+          <button type="submit" th:id="${buyer.id}"
+                  name="payFee"> <!--<i class="remove user icon"></i>-->
+            Pay</button>
+        </td>
+
       </tr>
 
 
@@ -39,6 +58,51 @@
       </tbody>
     </table>
   </div>
+  <script type="text/javascript">
+    $("[name='Agree']").click(function() {
+      var urlCall = "/buyer/contract/agree/";
+      $.ajax({
+        url : urlCall + $(this).attr('id'),
+        type : 'POST',
+        success : function(result) {
+          console.log(result);
+          $(location).attr("href", value="/");
+        },
+        error : function(result) {
+          console.log(result);
+        },
+      });
+    });
+    $("[name='Disagree']").click(function() {
+      var urlCall = "/buyer/contract/disagree/";
+      $.ajax({
+        url : urlCall + $(this).attr('id'),
+        type : 'POST',
+        success : function(result) {
+          console.log(result);
+          $(location).attr("href", value="/");
+        },
+        error : function(result) {
+          console.log(result);
+        },
+      });
+    });
+    $("[name='payFee']").click(function() {
+      var urlCall = "/buyer/contract/pay/";
+      $.ajax({
+        url : urlCall + $(this).attr('id'),
+        type : 'POST',
+        success : function(result) {
+          console.log(result);
+          $(location).attr("href", value="/");
+        },
+        error : function(result) {
+          console.log(result);
+        },
+      });
+    });
+  </script>
+
 
 
 </div>

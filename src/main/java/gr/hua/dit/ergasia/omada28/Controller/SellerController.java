@@ -49,7 +49,7 @@ public class SellerController {
 
 
     @PostMapping("/{id}/contract/agree/{choice}")
-    public Contract sellerAgree(@PathVariable("id") int id, @PathVariable("choice") int choice){
+    public Contract sellerChoice(@PathVariable("id") int id, @PathVariable("choice") int choice){
         Seller seller = sellerDao.findById(id);
 
 
@@ -86,8 +86,60 @@ public class SellerController {
 
     }
 
+    @PostMapping("/contract/agree/{id}")
+    public Contract sellerAgree(@PathVariable("id") int id) {
+        Seller seller = sellerDao.findById(id);
 
 
+
+        if (seller == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
+
+        Contract contract = seller.getContract();
+
+        if (contract == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
+
+        contract.setSeller_agree("yes");
+        contractDao.save(contract);
+        return contract;
+
+
+    }
+
+
+    @PostMapping("/contract/disagree/{id}")
+    public Contract sellerDisagree(@PathVariable("id") int id) {
+        Seller seller = sellerDao.findById(id);
+
+
+
+        if (seller == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
+
+        Contract contract = seller.getContract();
+
+        if (contract == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
+
+        contract.setSeller_agree("no");
+        contractDao.save(contract);
+        return contract;
+
+
+    }
 
 
 
