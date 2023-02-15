@@ -57,9 +57,9 @@ public class FormController {
 
     @PostMapping(path = "/buyerform")
     public String saveBuyer(@ModelAttribute("buyer") Buyer buyer){
-        //buyer.setFirstName("staticName");
+
         buyerDao.save(buyer);
-        return "redirect:/";
+        return "redirect:/buyerlist";
     }
 
 
@@ -98,9 +98,9 @@ public class FormController {
 
     @PostMapping(path = "/sellerform")
     public String saveSeller(@ModelAttribute("seller") Seller seller){
-        //buyer.setFirstName("staticName");
+
         sellerDao.save(seller);
-        return "redirect:/";
+        return "redirect:/sellerlist";
     }
 
 
@@ -142,9 +142,9 @@ public class FormController {
 
     @PostMapping(path = "/contractorform")
     public String saveContractor(@ModelAttribute("contractor") Contractor contractor){
-        //buyer.setFirstName("staticName");
+
         contractorDao.save(contractor);
-        return "redirect:/";
+        return "redirect:/contractorlist";
     }
 
 
@@ -185,9 +185,9 @@ public class FormController {
 
     @PostMapping(path = "/contractform")
     public String saveContract(@ModelAttribute("contract") Contract contract){
-        //buyer.setFirstName("staticName");
+
         contractDao.save(contract);
-        return "redirect:/";
+        return "redirect:/contractlist";
     }
 
 
@@ -235,5 +235,70 @@ public class FormController {
 
 
     // END OF CONTRACT CONTROLLERS
+
+
+    // START OF LINK CONTROLLERS
+
+
+
+    @GetMapping("/link")
+    public String showLink(Model model){
+        Link link = new Link();
+        model.addAttribute("link", link);
+        return "set-link";
+    }
+
+
+    @PostMapping(path = "/link")
+    public String saveLink(@ModelAttribute("link") Link link){
+        int buyerId;
+        int sellerId;
+        int contractorId;
+        String propertyName;
+
+        buyerId = link.getBuyerId();
+        sellerId = link.getSellerId();
+        contractorId = link.getContractorId();
+        propertyName = link.getPropertyName();
+
+        Buyer buyer = buyerDao.findById(buyerId);
+        Seller seller = sellerDao.findById(sellerId);
+        Contractor contractor = contractorDao.findById(contractorId);
+        Contract contract = new Contract();
+
+        contract.setPropertyname(propertyName);
+
+        if(buyer != null){
+            contract.setBuyer(buyer);
+        }
+
+        if(seller != null){
+            contract.setSeller(seller);
+        }
+
+        if(contractor != null){
+            contract.setContractor(contractor);
+        }
+
+        contractDao.save(contract);
+
+
+
+
+        return "redirect:/contractlist";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // END OF LINK CONTROLLERS
 
 }
